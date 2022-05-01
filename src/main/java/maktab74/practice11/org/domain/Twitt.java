@@ -2,44 +2,54 @@ package maktab74.practice11.org.domain;
 
 import maktab74.practice11.org.base.domain.BaseEntity;
 
+import javax.persistence.Entity;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+
+@Entity
+@Table(name = "twitt_tbl")
 public class Twitt extends BaseEntity<Long> {
 
-    private String comment;
+    private String WriteTwitt;
 
-    private boolean like = false;
+    @ManyToOne
+    private User user;
 
-    public Twitt(String comment, boolean like) {
-        this.comment = comment;
-        this.like = like;
+    public Twitt() {
     }
 
-    public Twitt(Long aLong, String comment, boolean like) {
+    public Twitt(Long aLong, String writeTwitt, User user) {
         super(aLong);
-        this.comment = comment;
-        this.like = like;
+        WriteTwitt = writeTwitt;
+        this.user = user;
     }
 
-    public String getComment() {
-        return comment;
+    public Twitt(String writeTwitt, User user) {
+        WriteTwitt = writeTwitt;
+        this.user = user;
     }
 
-    public void setComment(String comment) {
-        this.comment = comment;
+    public String getWriteTwitt() {
+        return WriteTwitt;
     }
 
-    public boolean isLike() {
-        return like;
+    public void setWriteTwitt(String writeTwitt) {
+        WriteTwitt = writeTwitt;
     }
 
-    public void setLike(boolean like) {
-        this.like = like;
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 
     @Override
     public String toString() {
         return "Twitt{" +
-                "comment='" + comment + '\'' +
-                ", like=" + like +
+                "WriteTwitt='" + WriteTwitt + '\'' +
+                ", user=" + user +
                 "} " + super.toString();
     }
 }
