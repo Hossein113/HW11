@@ -74,11 +74,31 @@ public class ShowMenu {
         System.out.println("=================");
     }
 
+    public static void showEnterTwitt() {
+        System.out.println("Enter Twitt");
+    }
+
+    public static void showSelectId() {
+        System.out.println("Select ID : ?");
+    }
+
+    public static void showSelectIdTwitt() {
+        System.out.println("Select ID Twitt: ?");
+    }
+
     public static void showAccounUser(User user) {
         System.out.println("=================");
         System.out.println("first Name : " + user.getFirstName());
         System.out.println("Last Name : " + user.getLastName());
         System.out.println("User Name : " + user.getUsertName());
+        System.out.println("=================");
+    }
+
+    public static void showLikeAndComment() {
+        System.out.println("=================");
+        System.out.println("1 . Like");
+        System.out.println("2 . comment");
+        System.out.println("3 . Back");
         System.out.println("=================");
     }
 
@@ -91,6 +111,17 @@ public class ShowMenu {
         System.out.println("4. Edit Twitt");
         System.out.println("5. Delet Twitt");
         System.out.println("6. Back");
+        System.out.println("=================");
+    }
+
+    public static void commentItem() {
+
+        System.out.println("=================");
+        System.out.println("1. Add commentt");
+        System.out.println("2. show commentt");
+        System.out.println("3. Edit Comment");
+        System.out.println("4. Delet Comment");
+        System.out.println("5. Back");
         System.out.println("=================");
     }
 }
