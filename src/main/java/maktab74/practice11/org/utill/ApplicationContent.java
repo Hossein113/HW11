@@ -5,13 +5,7 @@ import javax.persistence.EntityManager;
 public class ApplicationContent {
 
 
-    private static EntityManager entityManager;
+    private static EntityManager entityManager = HibernateUtill.getEntityManagerFactory().createEntityManager();
 
 
-    public EntityManager getEntityManager() {
-        if (entityManager == null) {
-            entityManager = Hibernate.getentityManagerFactory().createEntityManager();
-        }
-        return entityManager;
-    }
 }
