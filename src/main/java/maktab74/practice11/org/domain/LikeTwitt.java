@@ -2,38 +2,42 @@ package maktab74.practice11.org.domain;
 
 import maktab74.practice11.org.base.domain.BaseEntity;
 
-import javax.persistence.Entity;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
 @Table(name = "like_tbl")
 public class LikeTwitt extends BaseEntity<Long> {
 
-    private Boolean likeTwitt;
+    @JoinColumn(name = "like_twitt")
+    private Long likeTwitt;
 
     @OneToOne
     private User userLike;
 
+    @ManyToOne
+    private Twitt twitt;
+
     public LikeTwitt() {
     }
 
-    public LikeTwitt(Long aLong, Boolean likeTwitt, User userLike) {
+    public LikeTwitt(Long aLong, Long likeTwitt, User userLike, Twitt twitt) {
         super(aLong);
         this.likeTwitt = likeTwitt;
         this.userLike = userLike;
+        this.twitt = twitt;
     }
 
-    public LikeTwitt(Boolean likeTwitt, User userLike) {
+    public LikeTwitt(Long likeTwitt, User userLike, Twitt twitt) {
         this.likeTwitt = likeTwitt;
         this.userLike = userLike;
+        this.twitt = twitt;
     }
 
-    public Boolean getLikeTwitt() {
+    public Long getLikeTwitt() {
         return likeTwitt;
     }
 
-    public void setLikeTwitt(Boolean likeTwitt) {
+    public void setLikeTwitt(Long likeTwitt) {
         this.likeTwitt = likeTwitt;
     }
 
@@ -43,6 +47,14 @@ public class LikeTwitt extends BaseEntity<Long> {
 
     public void setUserLike(User userLike) {
         this.userLike = userLike;
+    }
+
+    public Twitt getTwitt() {
+        return twitt;
+    }
+
+    public void setTwitt(Twitt twitt) {
+        this.twitt = twitt;
     }
 
     @Override
