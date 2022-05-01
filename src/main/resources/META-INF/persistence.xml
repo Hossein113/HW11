@@ -8,13 +8,13 @@
     <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
 
     <properties>
-
       <property name="javax.persistence.jdbc.driver" value="com.mysql.cj.jdbc.Driver"/>
-      <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/twitt_table"/>
+      <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/twitter"/>
       <property name="javax.persistence.jdbc.user" value="root"/>
       <property name="javax.persistence.jdbc.password" value="Hossein@9368"/>
       <property name="hibernate.show_sql" value="true"/>
-      <property name="hibernate.hbm2ddl.auto" value="update"/>
+      <property name="hibernate.hbm2ddl.auto" value="create-drop"/>
     </properties>
+
   </persistence-unit>
 </persistence>
