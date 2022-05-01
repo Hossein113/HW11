@@ -48,8 +48,10 @@ public class Twitt extends BaseEntity<Long> {
     @Override
     public String toString() {
         return "Twitt{" +
-                "WriteTwitt='" + WriteTwitt + '\'' +
-                ", user=" + user +
-                "} " + super.toString();
+
+
+                "Twitt ID =" + super.getId() + '\'' + " , " +
+                "Writed By =" + user.getUsertName() + " , " +
+                "WriteTwitt = " + WriteTwitt;
     }
 }
