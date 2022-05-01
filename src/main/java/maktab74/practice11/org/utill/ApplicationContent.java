@@ -1,9 +1,15 @@
 package maktab74.practice11.org.utill;
 
+import maktab74.practice11.org.repository.LikeTwittRepository;
+import maktab74.practice11.org.repository.TwittRepository;
 import maktab74.practice11.org.repository.UserRepository;
+import maktab74.practice11.org.repository.imple.LikeTwittRepositoryImple;
+import maktab74.practice11.org.repository.imple.TwittRepositoryImple;
 import maktab74.practice11.org.repository.imple.UserRepositoryImple;
 import maktab74.practice11.org.security.SecurityUser;
+import maktab74.practice11.org.service.Imple.TwittServiceImple;
 import maktab74.practice11.org.service.Imple.UserServiceImple;
+import maktab74.practice11.org.service.TwittService;
 import maktab74.practice11.org.service.UserService;
 
 import javax.persistence.EntityManager;
@@ -18,6 +24,34 @@ public class ApplicationContent {
     private SecurityUser securityUser;
     private UserRepository userRepository;
     private UserService userService;
+    private TwittRepository twittRepository;
+    private TwittService twittService;
+    private LikeTwittRepository likeTwittRepository;
+
+    public static EntityManager getEntityManager() {
+        return entityManager;
+    }
+
+    public LikeTwittRepository getLikeTwittRepository() {
+        if (likeTwittRepository == null) {
+            likeTwittRepository = new LikeTwittRepositoryImple(entityManager);
+        }
+        return likeTwittRepository;
+    }
+
+    public TwittService getTwittService() {
+        if (twittService == null) {
+            twittService = new TwittServiceImple(getTwittRepository());
+        }
+        return twittService;
+    }
+
+    public TwittRepository getTwittRepository() {
+        if (twittRepository == null) {
+            twittRepository = new TwittRepositoryImple(entityManager);
+        }
+        return twittRepository;
+    }
 
     public UserRepository getUserRepository() {
         if (userRepository == null) {
