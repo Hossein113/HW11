@@ -7,12 +7,12 @@ public class SecurityUser extends BaseEntity<Long> {
 
     private User curentUser;
 
-    public User getUser() {
+    public User getCurentUser() {
         return curentUser;
     }
 
-    public void setUser(User user) {
-        this.curentUser = user;
+    public void setCurentUser(User curentUser) {
+        this.curentUser = curentUser;
     }
 
     public void logOut() {
