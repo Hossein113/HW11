@@ -29,6 +29,7 @@ public abstract class BaseRepositoryImple<E extends BaseEntity<ID>, ID extends S
         } else {
             entityManager.merge(e);
         }
+        commitTransaction();
         return e;
     }
 
