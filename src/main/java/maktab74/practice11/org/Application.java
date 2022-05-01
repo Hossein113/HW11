@@ -1,10 +1,14 @@
 package maktab74.practice11.org;
 
+import maktab74.practice11.org.domain.LikeTwitt;
+import maktab74.practice11.org.domain.Twitt;
 import maktab74.practice11.org.domain.User;
 import maktab74.practice11.org.utill.ApplicationContent;
 import maktab74.practice11.org.utill.HibernateUtill;
 import maktab74.practice11.org.utill.ShowMenu;
 import maktab74.practice11.org.utill.UserBrif;
+
+import java.util.List;
 
 
 public class Application {
@@ -106,22 +110,26 @@ public class Application {
             ShowMenu.twittItem();
             int number = applicationContent.getIntegerScanner().nextInt();
             if (number == 1) {
-                // createTwitt();
+                createTwitt(applicationContent, user);
+                twitt(applicationContent, user);
             } else if (number == 2) {
-                //showMyTwitt();
-
+                showMyTwitt(applicationContent, user);
+                twitt(applicationContent, user);
             } else if (number == 3) {
-                // showAllTwitt();
+                showAllTwitt(applicationContent);
+                likeAndComment(applicationContent, user);
+
             } else if (number == 4) {
-                // editMyTwitt();
+                editMyTwitt(applicationContent, user);
+                twitt(applicationContent, user);
             } else if (number == 5) {
-                // deletTwitt();
+                deletTwitt(applicationContent, user);
+                twitt(applicationContent, user);
             } else if (number == 6) {
                 loginMenu(applicationContent, user);
             } else {
                 ShowMenu.wrontNumber();
                 twitt(applicationContent, user);
-
             }
 
         } catch (Exception e) {
@@ -129,6 +137,142 @@ public class Application {
             applicationContent.getIntegerScanner().next();
             twitt(applicationContent, user);
         }
+    }
+
+    private static void likeAndComment(ApplicationContent applicationContent, User user) {
+        try {
+
+
+            ShowMenu.showLikeAndComment();
+            ShowMenu.enterNumber();
+            int number = applicationContent.getIntegerScanner().nextInt();
+            if (number == 1) {
+                likeTwitt(applicationContent, user);
+                likeAndComment(applicationContent, user);
+            } else if (number == 2) {
+                commentTwitt(applicationContent, user);
+                likeAndComment(applicationContent, user);
+            } else if (number == 3) {
+                twitt(applicationContent, user);
+            } else {
+                ShowMenu.wrontNumber();
+
+                likeAndComment(applicationContent, user);
+            }
+        } catch (Exception e) {
+            ShowMenu.wrontNumber();
+            applicationContent.getIntegerScanner().next();
+            likeAndComment(applicationContent, user);
+        }
+
+    }
+
+    private static void commentTwitt(ApplicationContent applicationContent, User user) {
+
+
+        try {
+
+
+            ShowMenu.commentItem();
+            ShowMenu.enterNumber();
+            int number = applicationContent.getIntegerScanner().nextInt();
+            if (number == 1) {
+                //creatComment(applicationContent);
+                commentTwitt(applicationContent, user);
+            } else if (number == 2) {
+
+                // showComment(applicationContent, user);
+            } else if (number == 3) {
+                //   editComment(applicationContent, user);
+            } else if (number == 4) {
+                //  deletedComment(applicationContent, user);
+                twitt(applicationContent, user);
+            } else if (number == 5) {
+                loginMenu(applicationContent, user);
+            } else {
+                ShowMenu.wrontNumber();
+                commentTwitt(applicationContent, user);
+            }
+        } catch (Exception e) {
+            ShowMenu.wrontNumber();
+            applicationContent.getIntegerScanner().next();
+            commentTwitt(applicationContent, user);
+        }
+    }
+
+    private static void likeTwitt(ApplicationContent applicationContent, User user) {
+        ShowMenu.showSelectIdTwitt();
+        long numberId = applicationContent.getIntegerScanner().nextInt();
+
+        Twitt twittFind = applicationContent.getEntityManager().find(Twitt.class, numberId);
+
+        LikeTwitt likeTwitt = new LikeTwitt(1L, user, twittFind);
+
+        LikeTwitt byUserTwittLike = applicationContent.getEntityManager().find(LikeTwitt.class, likeTwitt);
+        if (byUserTwittLike != null) {
+            applicationContent.getLikeTwittRepository().likeOrDislike(byUserTwittLike);
+
+        } else {
+
+            likeTwitt.setTwitt(twittFind);
+            likeTwitt.setLikeTwitt(1L);
+            likeTwitt.setUserLike(user);
+            applicationContent.getLikeTwittRepository().saveAndEdit(likeTwitt);
+
+        }
+        ShowMenu.successfully();
+    }
+
+    private static void deletTwitt(ApplicationContent applicationContent, User user) {
+        showMyTwitt(applicationContent, user);
+        ShowMenu.showSelectId();
+        long numberId = applicationContent.getIntegerScanner().nextInt();
+        Twitt twitt = applicationContent.getEntityManager().find(Twitt.class, numberId);
+        applicationContent.getTwittRepository().beginTransaction();
+        applicationContent.getEntityManager().remove(twitt);
+        applicationContent.getTwittRepository().commitTransaction();
+        ShowMenu.successfully();
+
+    }
+
+    private static void showAllTwitt(ApplicationContent applicationContent) {
+        List<Twitt> list = applicationContent.getTwittService().findAllTwitt();
+        list.forEach(System.out::println);
+    }
+
+    private static void showMyTwitt(ApplicationContent applicationContent, User user) {
+        List<Twitt> byUser = applicationContent.getTwittService().findByUser(user.getId());
+        byUser.forEach(System.out::println);
+
+    }
+
+    private static void editMyTwitt(ApplicationContent applicationContent, User user) {
+        showMyTwitt(applicationContent, user);
+        ShowMenu.showSelectId();
+        long numberId = applicationContent.getIntegerScanner().nextInt();
+        Twitt selectTwitt = applicationContent.getEntityManager().find(Twitt.class, numberId);
+        ShowMenu.showEnterTwitt();
+        String twittWrite = applicationContent.getStringScanner().nextLine();
+        if (twittWrite.equals("")) {
+            selectTwitt.setWriteTwitt(selectTwitt.getWriteTwitt());
+        } else {
+            selectTwitt.setWriteTwitt(twittWrite);
+        }
+        selectTwitt.setUser(user);
+        selectTwitt.setId(numberId);
+        applicationContent.getTwittRepository().saveAndEdit(selectTwitt);
+        ShowMenu.successfully();
+
+    }
+
+    private static void createTwitt(ApplicationContent applicationContent, User user) {
+
+        ShowMenu.showEnterTwitt();
+        String twittString = applicationContent.getStringScanner().nextLine();
+        Twitt twitt = new Twitt(twittString, user);
+        applicationContent.getTwittRepository().saveAndEdit(twitt);
+        ShowMenu.successfully();
+
     }
 
     private static void account(ApplicationContent applicationContent, User user) {
