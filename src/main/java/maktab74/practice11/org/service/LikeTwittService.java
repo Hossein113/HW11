@@ -4,4 +4,6 @@ import maktab74.practice11.org.base.service.BaseService;
 import maktab74.practice11.org.domain.LikeTwitt;
 
 public interface LikeTwittService extends BaseService<LikeTwitt, Long> {
+
+    void likeOrDislike(LikeTwitt likeTwitt);
 }
