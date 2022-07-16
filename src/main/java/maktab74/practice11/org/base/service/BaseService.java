@@ -2,7 +2,6 @@ package maktab74.practice11.org.base.service;
 
 import maktab74.practice11.org.base.domain.BaseEntity;
 
-import javax.persistence.EntityTransaction;
 import java.io.Serializable;
 import java.util.List;
 
@@ -19,13 +18,7 @@ public interface BaseService<E extends BaseEntity<ID>, ID extends Serializable> 
 
     List<E> findList();
 
-    EntityTransaction getTransaction();
 
-    void commitTransaction();
-
-    void beginTransaction();
-
-    void rollBackTransaction();
 
 
 }
