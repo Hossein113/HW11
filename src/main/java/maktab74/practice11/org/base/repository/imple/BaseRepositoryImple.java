@@ -23,47 +23,62 @@ public abstract class BaseRepositoryImple<E extends BaseEntity<ID>, ID extends S
 
     @Override
     public E saveAndEdit(E e) {
-        return null;
+        beginTransaction();
+        if (e.getId() != null) {
+            entityManager.persist(e);
+        } else {
+            entityManager.merge(e);
+        }
+        return e;
     }
 
     @Override
     public void delelt(ID id) {
+        entityManager.createQuery("delete from" + entityClass.getSimpleName() +
+                " e where e.id=:id ").setParameter("id", id).executeUpdate();
 
     }
 
     @Override
     public E findById(ID id) {
-        return null;
+
+        return entityManager.find(entityClass, id);
+        //return entityManager.createQuery("select e form"+entityClass.getSimpleName()+" e where" +
+        //   " e.id =: id" ,entityClass ).setParameter("id",id).getSingleResult();
     }
 
     @Override
     public Long countAll() {
-        return null;
+        return entityManager.createQuery("select count (id) from" + entityClass + " e",
+                Long.class).getSingleResult();
     }
 
     @Override
     public List<E> findList() {
-        return null;
+        return entityManager.createQuery("select e form" + entityClass.getSimpleName() + " e",
+                entityClass).getResultList();
     }
 
     @Override
     public EntityTransaction getTransaction() {
-        return null;
+        return entityManager.getTransaction();
     }
 
 
     @Override
     public void commitTransaction() {
-
+        getTransaction().commit();
     }
 
     @Override
     public void beginTransaction() {
-
+        if (!entityManager.getTransaction().isActive()) {
+            getTransaction().begin();
+        }
     }
 
     @Override
     public void rollBackTransaction() {
-
+        getTransaction().rollback();
     }
 }
