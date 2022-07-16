@@ -7,11 +7,12 @@ public class Hibernate {
 
     private static final EntityManagerFactory emf;
 
+
     static {
         emf = Persistence.createEntityManagerFactory("defult");
     }
 
-    public EntityManagerFactory getentityManagerFactory() {
+    public static EntityManagerFactory getentityManagerFactory() {
         return emf;
     }
 }
