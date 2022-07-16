@@ -4,7 +4,6 @@ import maktab74.practice11.org.base.domain.BaseEntity;
 import maktab74.practice11.org.base.repository.BaseRepository;
 import maktab74.practice11.org.base.service.BaseService;
 
-import javax.persistence.EntityTransaction;
 import java.io.Serializable;
 import java.util.List;
 
@@ -18,12 +17,12 @@ public class BaseServiceImple<E extends BaseEntity<ID>, ID extends Serializable,
 
     @Override
     public E saveAndEdit(E e) {
-        return null;
+        return repository.saveAndEdit(e);
     }
 
     @Override
     public void delelt(ID id) {
-
+        repository.delelt(id);
     }
 
     @Override
@@ -33,31 +32,14 @@ public class BaseServiceImple<E extends BaseEntity<ID>, ID extends Serializable,
 
     @Override
     public E findById(ID id) {
-        return null;
+        return repository.findById(id);
     }
 
     @Override
     public List<E> findList() {
-        return null;
+        return repository.findList();
     }
 
-    @Override
-    public EntityTransaction getTransaction() {
-        return null;
-    }
-
-    @Override
-    public void commitTransaction() {
 
     }
 
-    @Override
-    public void beginTransaction() {
-
-    }
-
-    @Override
-    public void rollBackTransaction() {
-
-    }
-}
