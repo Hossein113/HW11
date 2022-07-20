@@ -1,6 +1,7 @@
 package maktab74.practice11.org.repository.imple;
 
 import maktab74.practice11.org.base.repository.imple.BaseRepositoryImple;
+import maktab74.practice11.org.domain.CommentTwitt;
 import maktab74.practice11.org.domain.User;
 import maktab74.practice11.org.repository.UserRepository;
 import maktab74.practice11.org.utill.UserBrif;
@@ -32,5 +33,10 @@ public class UserRepositoryImple extends BaseRepositoryImple<User, Long> impleme
                 .setParameter("lastName", user.getLastName())
                 .setParameter("userName", user.getUsertName())
                 .executeUpdate();
+    }
+
+    @Override
+    public CommentTwitt findCommentById(Long id) {
+        return entityManager.find(CommentTwitt.class, id);
     }
 }

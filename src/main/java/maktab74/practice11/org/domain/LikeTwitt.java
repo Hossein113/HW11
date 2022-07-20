@@ -9,7 +9,7 @@ import javax.persistence.*;
 public class LikeTwitt extends BaseEntity<Long> {
 
     @JoinColumn(name = "like_twitt")
-    private Long likeTwitt;
+    private String likeTwitt;
 
     @OneToOne
     private User userLike;
@@ -20,24 +20,24 @@ public class LikeTwitt extends BaseEntity<Long> {
     public LikeTwitt() {
     }
 
-    public LikeTwitt(Long aLong, Long likeTwitt, User userLike, Twitt twitt) {
+    public LikeTwitt(Long aLong, String likeTwitt, User userLike, Twitt twitt) {
         super(aLong);
         this.likeTwitt = likeTwitt;
         this.userLike = userLike;
         this.twitt = twitt;
     }
 
-    public LikeTwitt(Long likeTwitt, User userLike, Twitt twitt) {
+    public LikeTwitt(String likeTwitt, User userLike, Twitt twitt) {
         this.likeTwitt = likeTwitt;
         this.userLike = userLike;
         this.twitt = twitt;
     }
 
-    public Long getLikeTwitt() {
+    public String getLikeTwitt() {
         return likeTwitt;
     }
 
-    public void setLikeTwitt(Long likeTwitt) {
+    public void setLikeTwitt(String likeTwitt) {
         this.likeTwitt = likeTwitt;
     }
 
@@ -59,9 +59,9 @@ public class LikeTwitt extends BaseEntity<Long> {
 
     @Override
     public String toString() {
-        return "LikeTwitt{" +
-                "likeTwitt=" + likeTwitt +
-                ", userLike=" + userLike +
-                "} " + super.toString();
+        return
+
+                "like =" + likeTwitt + '\'' +
+                        ", userLike=" + userLike.getUsertName() + '\'';
     }
 }

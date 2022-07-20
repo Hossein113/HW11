@@ -1,14 +1,20 @@
 package maktab74.practice11.org.utill;
 
+import maktab74.practice11.org.repository.CommentTwittRepository;
 import maktab74.practice11.org.repository.LikeTwittRepository;
 import maktab74.practice11.org.repository.TwittRepository;
 import maktab74.practice11.org.repository.UserRepository;
+import maktab74.practice11.org.repository.imple.CommentTwittRepositoryImple;
 import maktab74.practice11.org.repository.imple.LikeTwittRepositoryImple;
 import maktab74.practice11.org.repository.imple.TwittRepositoryImple;
 import maktab74.practice11.org.repository.imple.UserRepositoryImple;
 import maktab74.practice11.org.security.SecurityUser;
+import maktab74.practice11.org.service.CommentTwittService;
+import maktab74.practice11.org.service.Imple.CommentTwittServiceImple;
+import maktab74.practice11.org.service.Imple.LikeTwittServiceImple;
 import maktab74.practice11.org.service.Imple.TwittServiceImple;
 import maktab74.practice11.org.service.Imple.UserServiceImple;
+import maktab74.practice11.org.service.LikeTwittService;
 import maktab74.practice11.org.service.TwittService;
 import maktab74.practice11.org.service.UserService;
 
@@ -27,6 +33,32 @@ public class ApplicationContent {
     private TwittRepository twittRepository;
     private TwittService twittService;
     private LikeTwittRepository likeTwittRepository;
+    private LikeTwittService likeTwittService;
+    private CommentTwittRepository commentTwittRepository;
+    private CommentTwittService commentTwittService;
+
+    public CommentTwittService getCommentTwittService() {
+        if (commentTwittService == null) {
+            commentTwittService = new CommentTwittServiceImple(getCommentTwittRepository());
+        }
+        return commentTwittService;
+    }
+
+    public CommentTwittRepository getCommentTwittRepository() {
+        if (commentTwittRepository == null) {
+            commentTwittRepository = new CommentTwittRepositoryImple(entityManager);
+        }
+
+
+        return commentTwittRepository;
+    }
+
+    public LikeTwittService getLikeTwittService() {
+        if (likeTwittService == null) {
+            likeTwittService = new LikeTwittServiceImple(getLikeTwittRepository());
+        }
+        return likeTwittService;
+    }
 
     public static EntityManager getEntityManager() {
         return entityManager;

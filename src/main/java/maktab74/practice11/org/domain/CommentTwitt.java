@@ -14,19 +14,20 @@ public class CommentTwitt extends BaseEntity<Long> {
 
     @ManyToOne
     private User userComment;
+    @ManyToOne
+    private Twitt twitt;
 
-    public CommentTwitt() {
-    }
-
-    public CommentTwitt(Long aLong, String commentTwitt, User userComment) {
+    public CommentTwitt(Long aLong, String commentTwitt, User userComment, Twitt twitt) {
         super(aLong);
         this.commentTwitt = commentTwitt;
         this.userComment = userComment;
+        this.twitt = twitt;
     }
 
-    public CommentTwitt(String commentTwitt, User userComment) {
+    public CommentTwitt(String commentTwitt, User userComment, Twitt twitt) {
         this.commentTwitt = commentTwitt;
         this.userComment = userComment;
+        this.twitt = twitt;
     }
 
     public String getCommentTwitt() {
@@ -45,11 +46,23 @@ public class CommentTwitt extends BaseEntity<Long> {
         this.userComment = userComment;
     }
 
+    public CommentTwitt() {
+
+    }
+
+    public Twitt getTwitt() {
+        return twitt;
+    }
+
+    public void setTwitt(Twitt twitt) {
+        this.twitt = twitt;
+    }
+
     @Override
     public String toString() {
-        return "CommentTwitt{" +
-                "commentTwitt='" + commentTwitt + '\'' +
-                ", userComment=" + userComment +
-                "} " + super.toString();
+        return
+                "ID comment ='" + super.getId() + '\'' +
+                        "ID comment ='" + userComment.getUsertName() + '\'' +
+                        "comment='" + commentTwitt + '\'';
     }
 }

@@ -1,5 +1,6 @@
 package maktab74.practice11.org;
 
+import maktab74.practice11.org.domain.CommentTwitt;
 import maktab74.practice11.org.domain.LikeTwitt;
 import maktab74.practice11.org.domain.Twitt;
 import maktab74.practice11.org.domain.User;
@@ -177,15 +178,15 @@ public class Application {
             ShowMenu.enterNumber();
             int number = applicationContent.getIntegerScanner().nextInt();
             if (number == 1) {
-                //creatComment(applicationContent);
+                creatComment(applicationContent, user);
                 commentTwitt(applicationContent, user);
             } else if (number == 2) {
 
-                // showComment(applicationContent, user);
+                showAllComment(applicationContent);
             } else if (number == 3) {
-                //   editComment(applicationContent, user);
+                editComment(applicationContent, user);
             } else if (number == 4) {
-                //  deletedComment(applicationContent, user);
+                deletedComment(applicationContent, user);
                 twitt(applicationContent, user);
             } else if (number == 5) {
                 loginMenu(applicationContent, user);
@@ -200,25 +201,146 @@ public class Application {
         }
     }
 
-    private static void likeTwitt(ApplicationContent applicationContent, User user) {
-        ShowMenu.showSelectIdTwitt();
-        long numberId = applicationContent.getIntegerScanner().nextInt();
+    private static void deletedComment(ApplicationContent applicationContent, User user) {
+        showMyComment(applicationContent, user);
 
-        Twitt twittFind = applicationContent.getEntityManager().find(Twitt.class, numberId);
+        ShowMenu.showEnterIdComment();
+        long idComment = applicationContent.getIntegerScanner().nextInt();
+        CommentTwitt commentById =
+                applicationContent.getCommentTwittRepository().findCommentById(idComment);
 
-        LikeTwitt likeTwitt = new LikeTwitt(1L, user, twittFind);
-
-        LikeTwitt byUserTwittLike = applicationContent.getEntityManager().find(LikeTwitt.class, likeTwitt);
-        if (byUserTwittLike != null) {
-            applicationContent.getLikeTwittRepository().likeOrDislike(byUserTwittLike);
-
+        if (commentById.getUserComment().getId() == user.getId() || commentById.getTwitt().getId() == user.getId()) {
+            applicationContent.getCommentTwittRepository().beginTransaction();
+            applicationContent.getCommentTwittRepository().remove(commentById);
+            applicationContent.getCommentTwittRepository().commitTransaction();
+            ShowMenu.successfully();
         } else {
+            ShowMenu.showDoing();
+        }
+    }
 
-            likeTwitt.setTwitt(twittFind);
-            likeTwitt.setLikeTwitt(1L);
-            likeTwitt.setUserLike(user);
+    private static void editComment(ApplicationContent applicationContent, User user) {
+        showMyComment(applicationContent, user);
+        ShowMenu.showEnterIdComment();
+        long idComment = applicationContent.getIntegerScanner().nextInt();
+        CommentTwitt commentById =
+                applicationContent.getCommentTwittRepository().findCommentById(idComment);
+        if (commentById.getUserComment().getId() == user.getId()) {
+            ShowMenu.showEnterTwitt();
+            String commetText = applicationContent.getStringScanner().nextLine();
+
+            if (commetText.equals("")) {
+                commentById.setUserComment(user);
+                commentById.setCommentTwitt(commentById.getCommentTwitt());
+                commentById.setTwitt(commentById.getTwitt());
+                commentById.setId(commentById.getId());
+            } else {
+                commentById.setUserComment(user);
+                commentById.setCommentTwitt(commetText);
+                commentById.setTwitt(commentById.getTwitt());
+                commentById.setId(commentById.getId());
+            }
+            applicationContent.getCommentTwittRepository().saveAndEdit(commentById);
+            ShowMenu.successfully();
+        } else {
+            ShowMenu.showDoing();
+        }
+
+    }
+
+    private static void showAllComment(ApplicationContent applicationContent) {
+        showAllTwitt(applicationContent);
+        ShowMenu.showSelectIdTwitt();
+        Long idTwitt = Long.valueOf(applicationContent.getIntegerScanner().nextInt());
+        List<CommentTwitt> allComment = applicationContent.getCommentTwittRepository().findAllCommentForTwitt(idTwitt);
+        allComment.forEach(System.out::println);
+    }
+
+    private static void showMyComment(ApplicationContent applicationContent, User user) {
+        showAllTwitt(applicationContent);
+        ShowMenu.showSelectIdTwitt();
+        Long idTwitt = Long.valueOf(applicationContent.getIntegerScanner().nextInt());
+        Twitt twitt = applicationContent.getTwittRepository().findByIdEm(idTwitt);
+        List<CommentTwitt> commentTwitts = applicationContent.getCommentTwittRepository().myComment(twitt, user);
+        commentTwitts.forEach(System.out::println);
+    }
+
+    private static void creatComment(ApplicationContent applicationContent, User user) {
+        showAllTwitt(applicationContent);
+        ShowMenu.showSelectIdTwitt();
+        Long idTwitt = Long.valueOf(applicationContent.getIntegerScanner().nextInt());
+        Twitt byTwitt = applicationContent.getTwittService().findByTwitt(idTwitt);
+        ShowMenu.showEnterComment();
+        String addCommet = applicationContent.getStringScanner().nextLine();
+        CommentTwitt commentTwitt = new CommentTwitt();
+        commentTwitt.setCommentTwitt(addCommet);
+        commentTwitt.setUserComment(user);
+        commentTwitt.setTwitt(byTwitt);
+        applicationContent.getCommentTwittRepository().saveAndEdit(commentTwitt);
+        ShowMenu.successfully();
+    }
+
+    private static void likeTwitt(ApplicationContent applicationContent, User user) {
+        try {
+            ShowMenu.showLikeTwittItem();
+            ShowMenu.enterNumber();
+            int number = applicationContent.getIntegerScanner().nextInt();
+            if (number == 1) {
+                likeTwittId(applicationContent, user);
+            } else if (number == 2) {
+                showLikeTwitt(applicationContent);
+            } else if (number == 3) {
+                likeAndComment(applicationContent, user);
+            } else {
+                ShowMenu.wrontNumber();
+                likeTwitt(applicationContent, user);
+            }
+        } catch (Exception e) {
+            ShowMenu.wrontNumber();
+            applicationContent.getIntegerScanner().next();
+            likeTwitt(applicationContent, user);
+        }
+
+    }
+
+    private static void showLikeTwitt(ApplicationContent applicationContent) {
+        showAllTwitt(applicationContent);
+        printShowLikeTwitt(applicationContent);
+
+    }
+
+    private static void printShowLikeTwitt(ApplicationContent applicationContent) {
+        ShowMenu.showSelectIdTwitt();
+        long idTwitt = applicationContent.getIntegerScanner().nextInt();
+        Twitt twitt = applicationContent.getTwittRepository().findByIdEm(idTwitt);
+        Long aLong = applicationContent.getLikeTwittService().countLike(twitt);
+        System.out.println("count Like :" + "'" + aLong + "'");
+        List<LikeTwitt> likeTwitts = applicationContent.getLikeTwittService().showLikeusernames(twitt);
+        likeTwitts.forEach(System.out::println);
+    }
+
+
+    private static void likeTwittId(ApplicationContent applicationContent, User user) {
+        showAllTwitt(applicationContent);
+        ShowMenu.showSelectIdTwitt();
+        long idTwitt = applicationContent.getIntegerScanner().nextInt();
+        Twitt twitt = applicationContent.getTwittRepository().findByIdEm(idTwitt);
+        Long count = applicationContent.getLikeTwittRepository().likeOreNoLikeTwitt(twitt, user);
+        if (count == 0) {
+            LikeTwitt likeTwitt = new LikeTwitt("yes", user, twitt);
             applicationContent.getLikeTwittRepository().saveAndEdit(likeTwitt);
 
+        } else {
+            LikeTwitt byUserAndTwitt = applicationContent.getLikeTwittService().findByUserAndTwitt(twitt, user);
+            byUserAndTwitt.setTwitt(twitt);
+            byUserAndTwitt.setUserLike(user);
+            byUserAndTwitt.setId(byUserAndTwitt.getId());
+            if (byUserAndTwitt.getLikeTwitt().equals("yes")) {
+                byUserAndTwitt.setLikeTwitt("no");
+            } else {
+                byUserAndTwitt.setLikeTwitt("yes");
+            }
+            applicationContent.getLikeTwittRepository().saveAndEdit(byUserAndTwitt);
         }
         ShowMenu.successfully();
     }
@@ -227,18 +349,26 @@ public class Application {
         showMyTwitt(applicationContent, user);
         ShowMenu.showSelectId();
         long numberId = applicationContent.getIntegerScanner().nextInt();
-        Twitt twitt = applicationContent.getEntityManager().find(Twitt.class, numberId);
-        applicationContent.getTwittRepository().beginTransaction();
-        applicationContent.getEntityManager().remove(twitt);
-        applicationContent.getTwittRepository().commitTransaction();
-        ShowMenu.successfully();
+        Twitt twitt = applicationContent.getTwittRepository().findByIdEm(numberId);
+        if (twitt.getUser().getId() == user.getId()) {
+            applicationContent.getTwittRepository().beginTransaction();
 
+            applicationContent.getLikeTwittService().deletbyUser(user);
+            applicationContent.getCommentTwittService().deletByUser(user);
+            applicationContent.getTwittService().delettwittByUser(user);
+
+            applicationContent.getTwittRepository().commitTransaction();
+            ShowMenu.successfully();
+        } else {
+            ShowMenu.showDoing();
+        }
     }
 
     private static void showAllTwitt(ApplicationContent applicationContent) {
         List<Twitt> list = applicationContent.getTwittService().findAllTwitt();
         list.forEach(System.out::println);
     }
+
 
     private static void showMyTwitt(ApplicationContent applicationContent, User user) {
         List<Twitt> byUser = applicationContent.getTwittService().findByUser(user.getId());
@@ -250,19 +380,22 @@ public class Application {
         showMyTwitt(applicationContent, user);
         ShowMenu.showSelectId();
         long numberId = applicationContent.getIntegerScanner().nextInt();
-        Twitt selectTwitt = applicationContent.getEntityManager().find(Twitt.class, numberId);
-        ShowMenu.showEnterTwitt();
-        String twittWrite = applicationContent.getStringScanner().nextLine();
-        if (twittWrite.equals("")) {
-            selectTwitt.setWriteTwitt(selectTwitt.getWriteTwitt());
+        Twitt selectTwitt = applicationContent.getTwittService().findByTwitt(numberId);
+        if (selectTwitt.getUser().getId() == user.getId()) {
+            ShowMenu.showEnterTwitt();
+            String twittWrite = applicationContent.getStringScanner().nextLine();
+            if (twittWrite.equals("")) {
+                selectTwitt.setWriteTwitt(selectTwitt.getWriteTwitt());
+            } else {
+                selectTwitt.setWriteTwitt(twittWrite);
+            }
+            selectTwitt.setUser(user);
+            selectTwitt.setId(numberId);
+            applicationContent.getTwittRepository().saveAndEdit(selectTwitt);
+            ShowMenu.successfully();
         } else {
-            selectTwitt.setWriteTwitt(twittWrite);
+            ShowMenu.showDoing();
         }
-        selectTwitt.setUser(user);
-        selectTwitt.setId(numberId);
-        applicationContent.getTwittRepository().saveAndEdit(selectTwitt);
-        ShowMenu.successfully();
-
     }
 
     private static void createTwitt(ApplicationContent applicationContent, User user) {
@@ -307,7 +440,11 @@ public class Application {
     }
 
     private static void deletedAccount(ApplicationContent applicationContent, User user) {
+
         applicationContent.getUserRepository().beginTransaction();
+        applicationContent.getLikeTwittService().deletbyUser(user);
+        applicationContent.getCommentTwittService().deletByUser(user);
+        applicationContent.getTwittService().delettwittByUser(user);
         applicationContent.getUserService().deletUser(user);
         applicationContent.getUserRepository().commitTransaction();
         // applicationContent.getUserRepository().delelt(user.getId());
@@ -386,4 +523,6 @@ public class Application {
         ShowMenu.successfully();
 
     }
+
+
 }

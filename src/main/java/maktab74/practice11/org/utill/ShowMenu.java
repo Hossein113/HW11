@@ -102,6 +102,14 @@ public class ShowMenu {
         System.out.println("=================");
     }
 
+    public static void showLikeTwittItem() {
+        System.out.println("=================");
+        System.out.println("1 . Like Twitt");
+        System.out.println("2 . Show Like Twitt");
+        System.out.println("3 . Back");
+        System.out.println("=================");
+    }
+
     public static void twittItem() {
 
         System.out.println("=================");
@@ -117,11 +125,23 @@ public class ShowMenu {
     public static void commentItem() {
 
         System.out.println("=================");
-        System.out.println("1. Add commentt");
-        System.out.println("2. show commentt");
+        System.out.println("1. Add comment");
+        System.out.println("2. show comment");
         System.out.println("3. Edit Comment");
         System.out.println("4. Delet Comment");
         System.out.println("5. Back");
         System.out.println("=================");
+    }
+
+    public static void showEnterComment() {
+        System.out.println("Enter Comment :?");
+    }
+
+    public static void showEnterIdComment() {
+        System.out.println("Enter ID Comment :?");
+    }
+
+    public static void showDoing() {
+        System.out.println("your can't !!! ");
     }
 }
