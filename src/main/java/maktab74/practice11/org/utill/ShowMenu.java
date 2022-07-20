@@ -137,6 +137,10 @@ public class ShowMenu {
         System.out.println("Enter Comment :?");
     }
 
+    public static void showWrongLengh() {
+        System.out.println("Lengh > 280 !!!");
+    }
+
     public static void showEnterIdComment() {
         System.out.println("Enter ID Comment :?");
     }

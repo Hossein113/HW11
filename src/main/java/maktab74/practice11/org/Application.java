@@ -384,28 +384,37 @@ public class Application {
         if (selectTwitt.getUser().getId() == user.getId()) {
             ShowMenu.showEnterTwitt();
             String twittWrite = applicationContent.getStringScanner().nextLine();
-            if (twittWrite.equals("")) {
-                selectTwitt.setWriteTwitt(selectTwitt.getWriteTwitt());
+            if (twittWrite.length() <= 280) {
+                if (twittWrite.equals("")) {
+                    selectTwitt.setWriteTwitt(selectTwitt.getWriteTwitt());
+                } else {
+                    selectTwitt.setWriteTwitt(twittWrite);
+                }
+                selectTwitt.setUser(user);
+                selectTwitt.setId(numberId);
+                applicationContent.getTwittRepository().saveAndEdit(selectTwitt);
+                ShowMenu.successfully();
             } else {
-                selectTwitt.setWriteTwitt(twittWrite);
+                ShowMenu.showWrongLengh();
             }
-            selectTwitt.setUser(user);
-            selectTwitt.setId(numberId);
-            applicationContent.getTwittRepository().saveAndEdit(selectTwitt);
-            ShowMenu.successfully();
         } else {
             ShowMenu.showDoing();
         }
+
     }
 
     private static void createTwitt(ApplicationContent applicationContent, User user) {
 
         ShowMenu.showEnterTwitt();
         String twittString = applicationContent.getStringScanner().nextLine();
-        Twitt twitt = new Twitt(twittString, user);
-        applicationContent.getTwittRepository().saveAndEdit(twitt);
-        ShowMenu.successfully();
+        if (twittString.length() <= 280) {
+            Twitt twitt = new Twitt(twittString, user);
+            applicationContent.getTwittRepository().saveAndEdit(twitt);
+            ShowMenu.successfully();
 
+        } else {
+            ShowMenu.showWrongLengh();
+        }
     }
 
     private static void account(ApplicationContent applicationContent, User user) {
